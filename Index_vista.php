@@ -1,81 +1,94 @@
-
 <!DOCTYPE html>
 <html>
 
     <?php require 'Cabecera.php'; ?>
-  
 
-        <!-- Navigation -->
-        <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
-            <div class="container">
-                <a class="navbar-brand js-scroll-trigger" href="#page-top">Actividad Uno</a>
-            </div>
-        </nav>
 
-        <!-- Portfolio Grid Section -->
-        <section id="portfolio">
-            <div class="container centrar">
-                <div class="row">
-                    <div>
-                        <?php if (!empty(($error))): ?>
-                            <div class="alert alert-warning">Se Produjeron Los siguientes errores</div>
-                            <?php foreach ($error as $valor): ?>
-                                <div class ="alert alert-warning"><?php echo $valor; ?></div>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <h2 class="text-center"><?php echo $resultado["personaje"]; ?></h2>
-                            <hr class="star-primary">    
-                            <div>
-                                <?php if ($resultado["vive"] == 0): ?>
-                                    <div class="portfolio-item">
-                                        <a class="portfolio-link" href="#portfolioModal5" data-toggle="modal">
-                                            <div class="caption">
-                                                <div class="caption-content">
-                                                    <i class="fa fa-search-plus fa-3x"></i>
-                                                </div>
-                                            </div>
-                                            <img align="center" class="img-fluid" src="img/vivo.jpg" alt="">
-                                        </a>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand js-scroll-trigger" href="Index.php">Actividad Uno</a>
+        </div>
+    </nav>
+
+    <!-- Portfolio Grid Section -->
+    <section id="portfolio">
+        <div align="text-center" class="container">
+            <div class="row ">
+                <div>
+                    <div class="container">
+                        <div class="form-group">
+                            <legend>Formulario</legend> 
+                            <form method="post" action="">
+                                <?php if ($form->tieneErrores()): ?>
+                                    <div class="alert alert-danger">
+                                        Se encontraron errores al procesar el formulario.
                                     </div>
                                 <?php endif; ?>
-                                <?php if ($resultado["vive"] == 1): ?>
-                                    <div class="portfolio-item" >
-                                        <a class="portfolio-link" href="#portfolioModal6" data-toggle="modal">
-                                            <div class="caption">
-                                                <div class="caption-content">
-                                                    <i class="fa fa-search-plus fa-3x"></i>
-                                                </div>
-                                            </div>
-                                            <img class="img-fluid" src="img/muerto.jpg" alt="">
-                                        </a>
+                                <?php $tiene_error = $form->tieneError('nombre') ? "has-error" : ""; ?>
+                                <div class="form-group <?php echo $tiene_error; ?>">
+                                    <label for="nombre">Ingrese su Nombre</label>
+                                    <input name="nombre" type="text" class="form-control" id="nombre" value="<?php echo $form->getValor("nombre"); ?>" placeholder="Ingrese su Nombre">
+                                    <span class="alert-danger"><?php echo $form->getError('nombre'); ?></span>
+                                </div>
+                                <br>
+                                <?php $tiene_error = $form->tieneError('apellido') ? "has-error" : ""; ?>
+                                <div class="form-group <?php echo $tiene_error; ?>">
+                                    <label for="apellido">Ingrese su Apellido</label>
+                                    <input name="apellido" type="text" class="form-control" id="apellido" value="<?php echo $form->getValor("apellido"); ?>" placeholder="Ingrese su Apellido">
+                                    <span class="alert-danger"><?php echo $form->getError('apellido'); ?></span>
+                                </div>
+                                <br>
+                                <?php $tiene_error = $form->tieneError('activo') ? "has-error" : ""; ?>
+                                <div class="form-group <?php echo $tiene_error; ?>" >
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="activo" id="activo" value="1" <?php echo $form->getChecked('activo'); ?>>
+                                            Vigente
+                                        </label>
                                     </div>
-                                <?php endif; ?>
-                            </div>
-                            <div>
-                                <?php if (empty(($ciudades))): ?>
-                                    <div class="alert alert-warning">No hay Cuidades Registradas</div>
-                                <?php else: ?>    
-                                    <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="inlineFormCustomSelect">
-                                        <?php foreach ($ciudades as $value): ?>
-                                            <option><?php echo $value; ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                <?php endif; ?>    
-                            </div>
-                        <?php endif; ?>       
-                    </div>
+                                    <br>
+                                    <!--<?php $tiene_error = $form->tieneError('fecha') ? "has-error" : ""; ?>-->
+                                    <div class="form-group <?php echo $tiene_error; ?>">
+                                        <label for="Formulario">Ingrese Fecha de Nacimiento</label>
+                                        <div class='input-group date' id='datetimepicker1'>
+                                            <input id="fecha" name="fecha" type="date" value="<?php echo $form->getValor("fecha"); ?>">
+                                        </div>
+                                        <span class="alert-danger"><?php echo $form->getError('fecha'); ?></span>
+                                    </div>
+                                    <br>
+                                    <?php $tiene_error = $form->tieneError('localidad') ? "has-error" : ""; ?>
+                                    <div class="form-group <?php echo $tiene_error; ?>">
+                                        <label class="control-label" for="localidad">Localidad</label>
+                                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0 form-control" name="localidad" id="localidad">
+                                            <option value=""></option> 
+                                            <?php foreach ($form->localidad as $key => $item): ?>
+                                                <option value="<?php echo $key; ?>" <?php echo $form->getSelected('localidad', $key); ?>><?php echo $item; ?></option> 
+                                            <?php endforeach; ?>
+                                        </select>
+                                        <span class="alert-danger"><?php echo $form->getError('localidad'); ?></span>
+                                    </div>
+                                    <br>
+                                    <br>
+                                    <p><button type="submit" class="btn btn-primary">Procesar formulario</button></p>
 
+
+                            </form>
+
+                        </div>
+                    </div>     
                 </div>
+
             </div>
-        </section>
-        <?php require 'Footer.php';?>
-        
-        <?php require 'Modal.php'; ?>
+        </div>
+    </section>
+    <?php require 'Footer.php'; ?>
 
 
 
 
 
-    </body>
+
+</body>
 
 </html>
