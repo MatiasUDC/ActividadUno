@@ -6,12 +6,59 @@ class ClienteForm extends Form {
 
     //categorias del tag <select>
     public $localidad;
+    protected $errores = [];
+    protected $valores = [];
 
     public function __construct() {
         $this->localidad = [1 => "Trelew", 2 => "Rawson", 3 => "Puerto Madryn", 4 => "Comodoro Rivadavia", 5 => "Playa Union"];
     }
 
-    protected function procesarCampos() {
+    public function tieneValor($campo) {
+        return !empty($this->valores[$campo]);
+    }
+
+    public function getValor($campo) {
+        return $this->tieneValor($campo) ? $this->valores[$campo] : null;
+    }
+
+    public function tieneErrores() {
+        return !empty($this->errores);
+    }
+
+    public function tieneError($campo) {
+        return !empty($this->errores[$campo]);
+    }
+
+    public function getError($campo) {
+        return $this->tieneError($campo) ? $this->errores[$campo] : null;
+    }
+
+    public function setError($campo, $mensaje) {
+        $this->errores[$campo] = $mensaje;
+    }
+
+    public function procesar($arreglo_datos) {
+        $this->rellenarCon($arreglo_datos);
+        $this->validar();
+
+        return empty($this->errores);
+    }
+
+    public function getChecked($campo) {
+        return $this->getValor($campo) ? "checked" : "";
+    }
+
+    public function getSelected($campo, $valor_ref) {
+        return $this->getValor($campo) == $valor_ref ? "selected" : "";
+    }
+
+    protected function rellenarCon($arreglo_datos) {
+        foreach ($arreglo_datos as $k => $v) {
+            $this->valores[$k] = $v;
+        }
+    }
+
+    protected function validar() {
         $this->procesarNombre('nombre');
         $this->procesarApellido('apellido');
         $this->procesarFecha('fecha');
@@ -60,16 +107,17 @@ class ClienteForm extends Form {
 
     protected function procesarFecha($campo) {
         //$fecha = $this->getValor($campo);
+        $fecha = explode("/", $this->getValor($campo));
         if (empty($fecha)) {
             $this->setError($campo, "La fecha es invalida");
         }
-        $fecha = explode("/", $this->getValor($campo));
-
         if (count($fecha) < 3) {
             $this->setError($campo, "La fecha es invalida");
         }
-        
-        if (!checkdate((int)$fecha[1], (int)$fecha[0], (int)$fecha[2])) {
+        if (count($fecha) > 3) {
+            $this->setError($campo, "La fecha es invalida");
+        }
+        if (!checkdate((int) $fecha[1], (int) $fecha[0], (int) $fecha[2])) {
             $this->setError($campo, "La fecha es invalida");
         }
     }
