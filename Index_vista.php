@@ -51,7 +51,7 @@
                                     <!--<?php $tiene_error = $form->tieneError('fecha') ? "has-error" : ""; ?>-->
                                     <div class="form-group <?php echo $tiene_error; ?>">
                                         <label for="Formulario">Ingrese Fecha de Nacimiento</label>
-                                        <div class='input-group date' id='datetimepicker1'>
+                                        <div class='input-group date' id='fecha'>
                                             <input id="fecha" name="fecha" type="date" value="<?php echo $form->getValor("fecha"); ?>">
                                         </div>
                                         <span class="alert-danger"><?php echo $form->getError('fecha'); ?></span>

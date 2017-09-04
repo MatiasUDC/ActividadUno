@@ -34,11 +34,6 @@
     <script src="bibliotecas/js/freelancer.min.js"></script>
 
 
-    <script type="text/javascript">
-        $(function () {
-            $('#datetimepicker1').datetimepicker();
-        });
-    </script>
 
 </head>
 <body id="page-top">
