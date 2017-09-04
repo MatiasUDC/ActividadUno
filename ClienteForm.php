@@ -83,6 +83,9 @@ class ClienteForm extends Form {
         if ($nombre == $this->getValor('apellido')) {
             $this->setError($campo, "El nombre no puede ser igual al apellido");
         }
+        if (!ctype_alpha($nombre)) {
+            $this->setError($campo, "El nombre no puede contener numeros");
+        }
     }
 
     protected function procesarApellido($campo) {
@@ -103,22 +106,23 @@ class ClienteForm extends Form {
         if ($apellido == $this->getValor('nombre')) {
             $this->setError($campo, "El apellido no puede ser igual al nombre");
         }
+        if (!ctype_alpha($apellido)) {
+            $this->setError($campo, "El apellido no puede contener numeros");
+        }
     }
 
     protected function procesarFecha($campo) {
-        //$fecha = $this->getValor($campo);
-        $fecha = explode("/", $this->getValor($campo));
+        $fecha = $this->getValor($campo);
         if (empty($fecha)) {
-            $this->setError($campo, "La fecha es invalida");
-        }
-        if (count($fecha) < 3) {
-            $this->setError($campo, "La fecha es invalida");
+            $this->setError($campo, "La fecha esta vacia");
         }
         if (count($fecha) > 3) {
-            $this->setError($campo, "La fecha es invalida");
+            $this->setError($campo, "La fecha no cumple con el formato");
         }
-        if (!checkdate((int) $fecha[1], (int) $fecha[0], (int) $fecha[2])) {
-            $this->setError($campo, "La fecha es invalida");
+        $valores = explode("-", $this->getValor($campo));
+        
+        if (checkdate((int) $valores[1], (int) $valores[0], (int) $valores[2])) {
+            $this->setError($campo, "La fecha es invalida no tiene el formato dd-mm-aaaa");
         }
     }
 
