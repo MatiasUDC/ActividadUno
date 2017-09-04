@@ -12,6 +12,3 @@ try {
 } catch (PDOException $e) {
     die('Error de conexion de la DB: ' . $e->getMessage());
 }
-
-
-$pdo = null;
