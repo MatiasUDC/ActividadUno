@@ -114,16 +114,17 @@ class ClienteForm extends Form {
     protected function procesarFecha($campo) {
         $fecha = $this->getValor($campo);
         
-        if (empty($fecha)) {
-            $this->setError($campo, "La fecha esta vacia");
+        //valido parametro
+        if(empty($fecha)) {
+            $this->setError($campo, "Faltó ingresar la fecha de nacimiento");
+            return;	
         }
-        if (count($fecha) > 3) {
-            $this->setError($campo, "La fecha no cumple con el formato");
-        }
-        $valores = explode("-", $this->getValor($campo)[3]);
         
-        if (!checkdate((int) $valores[1], (int) $valores[0], (int) $valores[2])) {
-            $this->setError($campo, "La fecha es invalida no tiene el formato dd-mm-aaaa");
+                     
+        $fecha=str_replace('/', '-', $fecha);  //see explanation below for this replacement
+        if (!is_numeric(strtotime($fecha))){
+            $this->setError($campo, "El valor ingresado no es un valor aceptable");
+            return;	
         }
     }
 
